@@ -4,16 +4,20 @@ import logging
 import numpy as np  
 import joblib  
 
+app = Flask(__name__)  
+
+# 设置模板目录  
+template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates'))  
+app.template_folder = template_dir  
+
+
 # 设置日志  
 logging.basicConfig(level=logging.DEBUG)  
 logger = logging.getLogger(__name__)  
 
-# 初始化 Flask 应用  
-app = Flask(__name__)  
+ 
 
-# 设置模板和静态文件路径  
-template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates'))  
-app.template_folder = template_dir  
+
 
 # 模型相关配置  
 MODEL_FEATURES = ['NIHSS', 'SBP', 'NEUT', 'RDW', 'TOAST-LAA_1', 'IAS_1']  
@@ -117,9 +121,12 @@ def predict():
             'error': str(e)
         }), 500
 
+@app.route('/api/healthcheck')  
+def healthcheck():  
+    return jsonify({"status": "ok"})  
+
+# Vercel 需要的处理函数  
 app.debug = True  
 
-# Vercel 需要的入口点  
 if __name__ == '__main__':  
     app.run()  
-
