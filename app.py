@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import joblib
 import logging
+import os
 
 app = Flask(__name__)
 
@@ -12,7 +13,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 # 加载模型
 try:
-    model = joblib.load('XGBOOST_model1113.pkl')
+    model_path = os.path.join(os.path.dirname(__file__), 'XGBOOST_model1113.pkl')  
+    model = joblib.load(model_path) 
     logging.info("模型加载成功")
 except Exception as e:
     logging.error(f"模型加载失败: {str(e)}")
