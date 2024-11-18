@@ -1,34 +1,36 @@
+from flask import Flask, render_template, jsonify, request  
+import os  
+import logging  
+import numpy as np  
+import joblib  
 
-from flask import Flask, render_template, jsonify, request
-import os
-import logging
-import numpy as np
-import joblib
+# 设置日志  
+logging.basicConfig(level=logging.DEBUG)  
+logger = logging.getLogger(__name__)  
 
-# 设置日志
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+# 初始化 Flask 应用  
+app = Flask(__name__)  
 
-# 初始化 Flask 应用
-app = Flask(__name__,
-            template_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), 'templates')))
+# 设置模板和静态文件路径  
+template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates'))  
+app.template_folder = template_dir  
 
-# 模型相关配置
-MODEL_FEATURES = ['NIHSS', 'SBP', 'NEUT', 'RDW', 'TOAST-LAA_1', 'IAS_1']
-model = None
+# 模型相关配置  
+MODEL_FEATURES = ['NIHSS', 'SBP', 'NEUT', 'RDW', 'TOAST-LAA_1', 'IAS_1']  
+model = None  
 
-def load_model():
-    """加载模型"""
-    global model
-    try:
-        model_path = os.path.join(os.path.dirname(__file__), 'model', 'XGBOOST_model1113.pkl')
-        if os.path.exists(model_path):
-            model = joblib.load(model_path)
-            logger.info("模型加载成功")
-            return True
-    except Exception as e:
-        logger.error(f"模型加载失败: {str(e)}")
-    return False
+def load_model():  
+    """加载模型"""  
+    global model  
+    try:  
+        model_path = os.path.join(os.path.dirname(__file__), '..', 'model', 'XGBOOST_model1113.pkl')  
+        if os.path.exists(model_path):  
+            model = joblib.load(model_path)  
+            logger.info("模型加载成功")  
+            return True  
+    except Exception as e:  
+        logger.error(f"模型加载失败: {str(e)}")  
+    return False  
 
 def get_risk_level(probability):
     """根据概率返回风险等级和详细信息"""
@@ -115,6 +117,9 @@ def predict():
             'error': str(e)
         }), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+app.debug = True  
+
+# Vercel 需要的入口点  
+if __name__ == '__main__':  
+    app.run()  
 
