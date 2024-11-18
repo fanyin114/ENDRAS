@@ -180,7 +180,7 @@
             console.log('发送到服务器的数据:', data);
             
             try {
-                const response = await fetch('/predict', {
+                const response = await fetch('/api/predict', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
