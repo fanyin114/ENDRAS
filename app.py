@@ -1,3 +1,7 @@
+@app.route('/')  
+def home():  
+    return render_template('index.html') 
+
 from flask import Flask, request, jsonify, render_template
 import xgboost as xgb
 import numpy as np
