@@ -1,1 +1,18 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Risk Prediction</title>
+</head>
+<body>
+    <h1>Risk Prediction Model</h1>
+    <p>This is a test page</p>
+    <script>
+        fetch('/api/test')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.body.innerHTML += `<p>API Status: ${data.message}</p>`;
+            });
+    </script>
+</body>
+</html>
