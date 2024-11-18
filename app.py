@@ -1,6 +1,4 @@
-@app.route('/')  
-def home():  
-    return render_template('index.html') 
+
 
 from flask import Flask, request, jsonify, render_template
 import xgboost as xgb
@@ -10,6 +8,13 @@ import joblib
 import logging
 
 app = Flask(__name__)
+
+@app.route('/')  
+def home():  
+    return render_template('index.html')  
+
+@app.route('/predict', methods=['POST'])  
+def predict():  
 
 # 设置日志
 logging.basicConfig(level=logging.DEBUG)
@@ -87,6 +92,7 @@ def predict():
             'success': False,
             'error': str(e)
         })
+    pass  
 
 if __name__ == '__main__':
     app.run(debug=True)
